@@ -1,0 +1,43 @@
+import faker as f
+
+MAX_WORD_LENGTH = 10
+MIN_WORD_LENGTH = 7
+
+faker = f.Faker()
+gameOn = 'y'
+while gameOn == 'y':
+
+    print('Welcome to The HANGMAN! Let\'s start!')
+    length = 0
+    solution = ''
+    while MIN_WORD_LENGTH > length or length > MAX_WORD_LENGTH:
+        solution = faker.word()
+        length = len(solution)
+    guess = ''
+    i = 0
+    while i < length:
+        guess += '-'
+        i += 1
+    result = list(guess)
+
+    solved = 0
+    lives = 7
+    while solved < length and lives > 0:
+        print(''.join(result))
+        letter = ''
+        while len(letter) != 1:
+            letter = input('Left tries: ' + str(lives) + '\nYour next guess: ')
+        matches = 0
+        for i in range(length):
+            if result[i] == '-' and solution[i] == letter:
+                result[i] = letter
+                matches += 1
+        solved += matches
+        if matches == 0:
+            lives -= 1
+    if lives == 0:
+        print("You lost, the word was " + solution + "\nGame over!")
+    elif solved == length:
+        print("You won! The word was " + solution)
+
+    gameOn = input('Wonna play again? (y/n): ')
